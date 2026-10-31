@@ -1,0 +1,676 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0F0F0F">
+
+    <meta name="description"
+        content="Earth Defender - NASA Near Earth Object Monitoring and Planetary Defense Dashboard">
+
+    <title>Earth Defender | Asteroid Monitoring</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Application JavaScript -->
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- ==========================================
+             SIDEBAR
+        =========================================== -->
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="brand">
+
+                <div class="brand-icon">🌍</div>
+
+                <div class="brand-text">
+                    <h1>EARTH <span>DEFENDER</span></h1>
+                    <p>PLANETARY DEFENSE SYSTEM</p>
+                </div>
+
+            </div>
+
+            <div class="sidebar-section">
+
+                <p class="sidebar-label">COMMAND CENTER</p>
+
+                <nav class="navigation">
+
+                    <a href="#overview" class="nav-link active">
+                        <span class="nav-icon">▦</span>
+                        Dashboard
+                    </a>
+
+                    <a href="#visualizer" class="nav-link">
+                        <span class="nav-icon">◎</span>
+                        Asteroid Visualizer
+                    </a>
+
+                    <a href="#asteroid-feed" class="nav-link">
+                        <span class="nav-icon">☄</span>
+                        Asteroid Feed
+                    </a>
+
+                    <a href="#mission-status" class="nav-link">
+                        <span class="nav-icon">◈</span>
+                        Mission Status
+                    </a>
+
+                </nav>
+
+            </div>
+
+            <div class="sidebar-section">
+
+                <p class="sidebar-label">SYSTEM</p>
+
+                <nav class="navigation">
+
+                    <a href="https://api.nasa.gov/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="nav-link">
+                        <span class="nav-icon">↗</span>
+                        NASA Data Source
+                    </a>
+
+                </nav>
+
+            </div>
+
+            <div class="sidebar-bottom">
+
+                <div class="system-card">
+
+                    <div class="system-card-header">
+                        <span class="status-dot"></span>
+                        <span>SYSTEM STATUS</span>
+                    </div>
+
+                    <h3 id="connection-status">INITIALIZING</h3>
+
+                    <p>NASA API Connection</p>
+
+                </div>
+
+                <div class="sidebar-footer">
+                    EARTH DEFENDER v1.0
+                    <br>
+                    PLANETARY MONITORING
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ==========================================
+             MAIN CONTENT
+        =========================================== -->
+
+        <main class="main-content" id="overview">
+
+
+            <!-- HEADER -->
+
+            <header class="top-header">
+
+                <div class="header-left">
+
+                    <button
+                        class="mobile-menu-button"
+                        id="mobile-menu-button"
+                        aria-label="Toggle navigation">
+                        ☰
+                    </button>
+
+                    <div>
+                        <p class="header-overline">
+                            PLANETARY DEFENSE / MONITORING
+                        </p>
+
+                        <h2>Asteroid Monitoring</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="header-right">
+
+                    <div class="header-date">
+                        <span class="header-date-label">MISSION DATE</span>
+                        <strong id="header-date">Loading date...</strong>
+                    </div>
+
+                    <div class="live-indicator">
+                        <span class="status-dot pulse"></span>
+                        LIVE MONITORING
+                    </div>
+
+
+                </div>
+
+            </header>
+
+
+            <!-- ======================================
+                 PAGE INTRODUCTION
+            ======================================= -->
+
+            <section class="page-intro">
+
+                <div>
+                    <p class="section-overline">MISSION CONTROL CENTER</p>
+
+                    <h2>
+                        Protecting Earth,
+                        <span>One Asteroid at a Time.</span>
+                    </h2>
+
+                    <p class="intro-description">
+                        Track, analyze, and monitor Near-Earth Objects
+                        using real-time data from NASA's NeoWs database.
+                    </p>
+                </div>
+
+                <div class="mission-badge">
+                    <span class="mission-badge-icon">🛰️</span>
+
+                    <div>
+                        <strong>MISSION ACTIVE</strong>
+                        <small>Deep Space Surveillance</small>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 RED ALERT BANNER
+            ======================================= -->
+
+            <section class="alert-banner hidden" id="red-alert">
+
+                <div class="alert-content">
+
+                    <div class="alert-icon">⚠</div>
+
+                    <div>
+                        <h3>PLANETARY DEFENSE ALERT</h3>
+
+                        <p id="alert-description">
+                            Potentially hazardous asteroid detected.
+                        </p>
+
+                        <small>
+                            PHA classification does not mean an imminent impact.
+                        </small>
+                    </div>
+
+                </div>
+
+                <button class="btn-alert" id="shield-button">
+                    🛡 Deploy Deflection Shield
+                </button>
+
+                <p class="shield-status hidden" id="shield-status">
+                    DEFENSE SIMULATION ACTIVATED
+                </p>
+
+            </section>
+
+
+            <!-- ======================================
+                 STATISTICS
+            ======================================= -->
+
+            <section class="stats-grid">
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">TOTAL ASTEROIDS</span>
+                        <span class="stat-icon green-icon">☄</span>
+                    </div>
+
+                    <h3 id="total-asteroids">--</h3>
+
+                    <p>Objects detected in selected feed</p>
+
+                    <div class="stat-bottom">
+                        <span class="stat-indicator">●</span>
+                        NASA NeoWs Database
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">POTENTIALLY HAZARDOUS</span>
+                        <span class="stat-icon warning-icon">⚠</span>
+                    </div>
+
+                    <h3 id="total-hazardous">--</h3>
+
+                    <p>NASA PHA classification</p>
+
+                    <div class="stat-bottom warning-text">
+                        Risk classification indicator
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">CLOSEST APPROACH</span>
+                        <span class="stat-icon green-icon">◎</span>
+                    </div>
+
+                    <h3 id="closest-distance">--</h3>
+
+                    <p>Minimum miss distance to Earth</p>
+
+                    <div class="stat-bottom">
+                        <span class="stat-indicator">●</span>
+                        Closest recorded approach
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">FASTEST OBJECT</span>
+                        <span class="stat-icon green-icon">↗</span>
+                    </div>
+
+                    <h3 id="fastest-velocity">--</h3>
+
+                    <p>Maximum relative velocity</p>
+
+                    <div class="stat-bottom">
+                        <span class="stat-indicator">●</span>
+                        Relative speed
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- ======================================
+                 SEARCH AND FILTERS
+            ======================================= -->
+
+            <section class="panel filter-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <p class="section-overline">DATA EXPLORER</p>
+                        <h3>Search & Filters</h3>
+                    </div>
+
+                    <span class="panel-icon">⌕</span>
+
+                </div>
+
+
+                <div class="filter-grid">
+
+                    <div class="filter-group">
+
+                        <label for="date-picker">MISSION DATE</label>
+
+                        <input
+                            type="date"
+                            id="date-picker"
+                            class="form-control">
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label for="search-input">SEARCH OBJECT</label>
+
+                        <input
+                            type="search"
+                            id="search-input"
+                            class="form-control"
+                            placeholder="Search asteroid name...">
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label for="risk-filter">RISK CLASSIFICATION</label>
+
+                        <select id="risk-filter" class="form-control">
+
+                            <option value="all">All Objects</option>
+                            <option value="hazardous">Potentially Hazardous</option>
+                            <option value="safe">Non-Hazardous</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="filter-group filter-action">
+
+                        <label>&nbsp;</label>
+
+                        <button class="btn-primary" id="scan-button">
+                            ⌕ SCAN SECTOR
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="filter-footer">
+
+                    <span id="filter-results">
+                        Showing all detected objects
+                    </span>
+
+                    <button class="btn-text" id="reset-filters">
+                        Reset Filters ↺
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 VISUALIZATION + MISSION STATUS
+            ======================================= -->
+
+            <section class="dashboard-grid">
+
+                <!-- ASTEROID VISUALIZER -->
+
+                <article class="panel visualizer-panel" id="visualizer">
+
+                    <div class="panel-heading">
+
+                        <div>
+                            <p class="section-overline">SPACE SURVEILLANCE</p>
+                            <h3>Asteroid Visualizer</h3>
+                        </div>
+
+                        <span class="visualizer-live">
+                            <span class="status-dot"></span>
+                            RADAR ACTIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="radar-container" id="radar-container">
+
+                        <div class="radar-grid"></div>
+
+                        <div class="radar-circle radar-circle-one"></div>
+                        <div class="radar-circle radar-circle-two"></div>
+                        <div class="radar-circle radar-circle-three"></div>
+
+                        <div class="radar-crosshair horizontal"></div>
+                        <div class="radar-crosshair vertical"></div>
+
+                        <div class="radar-sweep"></div>
+
+                        <div class="earth-marker">
+                            <span>🌍</span>
+                        </div>
+
+                        <div class="radar-center-label">
+                            EARTH
+                        </div>
+
+                        <!-- Asteroid markers generated by JavaScript -->
+                        <div id="radar-markers"></div>
+
+                        <div class="radar-coordinate radar-top">
+                            SECTOR 01 / ORBITAL TRACKING
+                        </div>
+
+                        <div class="radar-coordinate radar-bottom">
+                            RADAR SIMULATION · NOT TO SCALE
+                        </div>
+
+                    </div>
+
+
+                    <div class="visualizer-legend">
+
+                        <div>
+                            <span class="legend-dot safe-dot"></span>
+                            Non-Hazardous
+                        </div>
+
+                        <div>
+                            <span class="legend-dot warning-dot"></span>
+                            Potentially Hazardous
+                        </div>
+
+                        <div>
+                            <span class="legend-dot earth-dot"></span>
+                            Earth
+                        </div>
+
+                    </div>
+
+                    <p class="visualizer-note">
+                        Radar markers are illustrative representations of
+                        detected objects, not their actual orbital positions.
+                    </p>
+
+                </article>
+
+
+                <!-- MISSION STATUS -->
+
+                <article class="panel mission-panel" id="mission-status">
+
+                    <div class="panel-heading">
+
+                        <div>
+                            <p class="section-overline">SYSTEM OVERVIEW</p>
+                            <h3>Mission Status</h3>
+                        </div>
+
+                        <span class="panel-icon">◈</span>
+
+                    </div>
+
+
+                    <div class="mission-status-main">
+
+                        <div class="mission-status-circle" id="mission-status-circle">
+
+                            <div>
+                                <strong id="mission-score">--</strong>
+                                <span>STATUS</span>
+                            </div>
+
+                        </div>
+
+                        <h4 id="mission-status-title">AWAITING DATA</h4>
+
+                        <p id="mission-status-description">
+                            Initializing planetary defense monitoring.
+                        </p>
+
+                    </div>
+
+
+                    <div class="mission-metrics">
+
+                        <div class="metric-row">
+                            <span>API CONNECTION</span>
+                            <strong id="api-status">CONNECTING</strong>
+                        </div>
+
+                        <div class="metric-row">
+                            <span>OBJECTS TRACKED</span>
+                            <strong id="tracked-count">0</strong>
+                        </div>
+
+                        <div class="metric-row">
+                            <span>HAZARDOUS OBJECTS</span>
+                            <strong id="mission-hazard-count">0</strong>
+                        </div>
+
+                        <div class="metric-row">
+                            <span>LAST SYNCHRONIZATION</span>
+                            <strong id="last-updated">--:--</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="mission-footer">
+                        <span class="status-dot"></span>
+                        PLANETARY DEFENSE MONITORING
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- ======================================
+                 ASTEROID FEED
+            ======================================= -->
+
+            <section class="panel asteroid-feed-panel" id="asteroid-feed">
+
+                <div class="panel-heading feed-heading">
+
+                    <div>
+                        <p class="section-overline">NEAR-EARTH OBJECT DATABASE</p>
+                        <h3>Detected Asteroids</h3>
+                    </div>
+
+                    <div class="feed-count" id="results-count">
+                        0 OBJECTS
+                    </div>
+
+                </div>
+
+
+                <!-- Loading State -->
+
+                <div class="loading-state hidden" id="loading-state">
+
+                    <div class="loading-spinner"></div>
+
+                    <h4>SCANNING DEEP SPACE</h4>
+
+                    <p>Retrieving NASA asteroid telemetry...</p>
+
+                </div>
+
+
+                <!-- Error State -->
+
+                <div class="error-state hidden" id="error-state">
+
+                    <span>⚠</span>
+
+                    <h4>CONNECTION ERROR</h4>
+
+                    <p id="error-message">
+                        Unable to retrieve asteroid information.
+                    </p>
+
+                    <button class="btn-primary" id="retry-button">
+                        RETRY CONNECTION
+                    </button>
+
+                </div>
+
+
+                <!-- Empty State -->
+
+                <div class="empty-state hidden" id="empty-state">
+
+                    <span>🌌</span>
+
+                    <h4>NO OBJECTS FOUND</h4>
+
+                    <p>No asteroid records match the selected filters.</p>
+
+                </div>
+
+
+                <!-- Dynamic Asteroid Cards -->
+
+                <div class="asteroid-grid" id="asteroid-grid">
+
+                    <!-- JavaScript generates asteroid cards here -->
+
+                </div>
+
+
+                <div class="feed-footer">
+
+                    <span>DATA SOURCE: NASA / JPL NEOWS</span>
+
+                    <a href="https://api.nasa.gov/"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        NASA OPEN API ↗
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 FOOTER
+            ======================================= -->
+
+            <footer class="main-footer">
+
+                <div>
+                    <strong>EARTH DEFENDER</strong>
+                    <p>Planetary Defense Monitoring System</p>
+                </div>
+
+                <p>
+                    NASA data attribution · Educational simulation · 2026
+                </p>
+
+            </footer>
+
+        </main>
+
+    </div>
+
+</body>
+</html>
